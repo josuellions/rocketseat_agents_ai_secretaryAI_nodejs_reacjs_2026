@@ -1,0 +1,12 @@
+{
+  "name": "secretary-ai",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node  --env-file=.env.development --watch src/secretary.js "
+  },
+  "dependencies": {
+    "@google/genai": "^2.8.0",
+    "dotenv": "^17.4.2"
+  }
+}
