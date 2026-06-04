@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node  --env-file=.env.development --watch src/secretary.js "
+    "dev": "node  --env-file=.env.development src/secretary.js",
+    "dev:watch": "node  --env-file=.env.development --watch src/secretary.js"
   },
   "dependencies": {
     "@google/genai": "^2.8.0",
