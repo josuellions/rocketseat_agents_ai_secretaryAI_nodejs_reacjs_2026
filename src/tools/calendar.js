@@ -95,7 +95,8 @@ const scheduleEvent = {
   },
   declaration: {
     name: "scheduleEvent",
-    description: "retorna os eventos do calendário para um determinado dia.",
+    description:
+      "marcar um novo eventos no calendário para um determinado dia.",
     parameters: {
       type: "OBJECT",
       properties: {
@@ -131,12 +132,12 @@ const rescheduleEvent = {
     const eventList = calendar[date] ?? [];
     const eventIndex = eventList.findIndex((obj) => obj.title === title);
 
-    if (eventIndex > 0) {
-      calendar[date][eventIndex].time = newTime;
-      return "Evento atualizado com sucesso!";
+    if (eventIndex == -1) {
+      return "Evento não encontrado";
     }
 
-    return "Evento não encontrado";
+    calendar[date][eventIndex].time = newTime;
+    return "Evento atualizado com sucesso!";
   },
   declaration: {
     name: "rescheduleEvent",
@@ -166,6 +167,11 @@ const rescheduleEvent = {
   },
 };
 
-const allFuncions = [getTodayDate, getEvents, scheduleEvent, rescheduleEvent];
+const allDefinitions = [
+  getTodayDate,
+  getEvents,
+  scheduleEvent,
+  rescheduleEvent,
+];
 
-export { allFuncions };
+export { allDefinitions };

@@ -82,6 +82,6 @@ const sendEmail = {
   },
 };
 
-const allFuncions = [getEmails, sendEmail];
+const allDefinitions = [getEmails, sendEmail];
 
-export { allFuncions };
+export { allDefinitions };
