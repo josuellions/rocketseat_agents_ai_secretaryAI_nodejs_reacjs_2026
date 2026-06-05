@@ -95,7 +95,8 @@ const scheduleEvent = {
   },
   declaration: {
     name: "scheduleEvent",
-    description: "retorna os eventos do calendário para um determinado dia.",
+    description:
+      "marcar um novo eventos no calendário para um determinado dia.",
     parameters: {
       type: "OBJECT",
       properties: {
@@ -166,6 +167,11 @@ const rescheduleEvent = {
   },
 };
 
-const allFuncions = [getTodayDate, getEvents, scheduleEvent, rescheduleEvent];
+const allDefinitions = [
+  getTodayDate,
+  getEvents,
+  scheduleEvent,
+  rescheduleEvent,
+];
 
-export { allFuncions };
+export { allDefinitions };
