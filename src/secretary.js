@@ -1,5 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 
+import readline from "readline";
+
 import { allDefinitions as calendarDefinitions } from "./tools/calendar.js";
 import { allDefinitions as emailDefinitions } from "./tools/email.js";
 
@@ -11,69 +13,104 @@ const allFunctions = Object.fromEntries(
   allDefinitions.map((def) => [def.declaration.name, def.function]),
 );
 
+//Cria interface terminal (shell)
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
 const baseUseAICalendar = async () => {
   try {
     console.log("Script iniciado:", new Date().toISOString());
-    const model = "gemini-3.1-flash-lite"; // "gemini-2.5-flash"
-
-    const contents = [
-      {
-        role: "user",
-        parts: [
-          {
-            text: "que dia é hoje?",
-            // text: "qual a temperatura no Brasil?",
-            // text: "quais eventos na minha agenda para o dia 10/06/20230?",
-            //text: "quais eventos na minha agenda enter os dias 2026-06-02?",
-            //text: "marque um evento novo para dia 10/06/2026 as 20:00, chamado 'Jantar comemorativo' com Roberta e Fernanda.",
-            //text: "madar um email com mensagem de bonita e emotiva de feliz aniversario, para Roberta.",
-          },
-        ],
-      },
-    ];
-
-    let response = await ai.models.generateContent({
-      //model: "gemini-2.5-flash",
-      //model: "gemini-3.1-flash-lite",
-      model: model,
-      contents: contents,
-      config: {
-        tools: [
-          {
-            functionDeclarations: allDeclarations,
-          },
-        ],
-      },
-    });
-
-    const functionCall = response.candidates[0].content.parts[0].functionCall;
-    const functionToExecute = functionCall.name;
-    const functionParameters = functionCall.args;
-
-    const fn = allFunctions[functionToExecute];
-
-    const result = fn(functionParameters);
-
-    const functionResponse = {
-      role: "user",
-      parts: [
-        {
-          functionResponse: {
-            name: functionToExecute,
-            response: { result: result },
-          },
-        },
-      ],
+    const models = {
+      pro: "gemini-2.5-pro",
+      flash: "gemini-2.5-flash",
+      lite: "gemini-3.1-flash-lite",
+      tts: "Gemini 2.5 Flash TTS",
     };
 
-    contents.push(functionResponse);
+    const model = models.lite;
 
-    response = await ai.models.generateContent({
-      model: model,
-      contents: contents,
-    });
+    // const contents = [
+    //   {
+    //     role: "user",
+    //     parts: [
+    //       {
+    //         // text: "que dia é hoje?",
+    //         // text: "qual a temperatura no Brasil?",
+    //         // text: "quais eventos na minha agenda para o dia 10/06/20230?",
+    //         //text: "quais eventos na minha agenda enter os dias 2026-06-02?",
+    //         //text: "marque um evento novo para dia 10/06/2026 as 20:00, chamado 'Jantar comemorativo' com Roberta e Fernanda.",
+    //         //text: "madar um email com mensagem de bonita e emotiva de feliz aniversario, para Roberta.",
+    //         //text: "quais eventos tem na minha agenda hoje?",
+    //         text: "moster todos os eventos do mes que tenho em minha agenda.",
+    //       },
+    //     ],
+    //   },
+    // ];
+    const contents = [];
 
-    console.log(response.candidates[0].content.parts[0]);
+    while (true) {
+      const query = await new Promise((resolve) => {
+        rl.question("Voce: ", resolve);
+      });
+
+      contents.push({
+        role: "user",
+        parts: [{ text: query }],
+      });
+
+      let response = await ai.models.generateContent({
+        model: model,
+        contents: contents,
+        config: {
+          tools: [{ functionDeclarations: allDeclarations }],
+        },
+      });
+
+      while (response.functionCalls) {
+        console.log(response.functionCalls.length);
+
+        for (const func of response.functionCalls) {
+          const functionToExecute = func.name;
+          const functionParameters = func.args;
+
+          console.log(`>> Chamada de função: ${functionToExecute}`);
+
+          const fn = allFunctions[functionToExecute];
+
+          const result = fn(functionParameters);
+
+          const functionResponse = {
+            role: "user",
+            parts: [
+              {
+                functionResponse: {
+                  name: functionToExecute,
+                  response: { result: result },
+                },
+              },
+            ],
+          };
+
+          contents.push(functionResponse);
+        }
+
+        response = await ai.models.generateContent({
+          model: model,
+          contents: contents,
+          config: {
+            tools: [
+              {
+                functionDeclarations: allDeclarations,
+              },
+            ],
+          },
+        });
+      }
+
+      console.log(`AI: ${response.candidates[0].content.parts[0].text}`);
+    }
   } catch (error) {
     if (error.status === 429) {
       console.error("Limite de requisições excedido.");
