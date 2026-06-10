@@ -1,4 +1,11 @@
-const inbox = [
+import z from "zod";
+import type { Tool } from "./interfaces.js";
+
+interface Email {
+  sender: string;
+  message: string;
+}
+const inbox: Email[] = [
   {
     sender: "ana.silva@empresa.com",
     message:
@@ -46,9 +53,19 @@ const inbox = [
   },
 ];
 
-const getEmails = {
-  function: () => {
-    return inbox;
+const getEmails: Tool = {
+  function: async () => {
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(inbox),
+        },
+      ],
+      structuredContent: {
+        inbox: inbox,
+      },
+    };
   },
   declaration: {
     name: "getEmails",
@@ -56,29 +73,24 @@ const getEmails = {
   },
 };
 
-const sendEmail = {
-  function: ({ contact, message }) => {
-    console.log(">> Email enviado com sucesso! \n", { contact, message });
-    inbox.push({ sender: contact, message });
-    return inbox;
+const sendEmail: Tool = {
+  function: async ({ contact, message }) => {
+    return {
+      content: [
+        {
+          type: "text",
+          text: `"Email enviado com sucesso para ", ${contact}: ${message}`,
+        },
+      ],
+    };
   },
   declaration: {
     name: "sendEmail",
     description: "envia um email para um contato.",
-    parameters: {
-      type: "OBJECT",
-      properties: {
-        contact: {
-          type: "STRING",
-          description: "o nome do contato para enviar a mensagem",
-        },
-        message: {
-          type: "STRING",
-          description: "a mensagem a ser enviada",
-        },
-      },
-      required: ["contact", "message"],
-    },
+    parameters: z.object({
+      contact: z.string().describe("o nome do contato para enviar a mensagem"),
+      message: z.string().describe("a mensagem a ser enviada"),
+    }),
   },
 };
 
