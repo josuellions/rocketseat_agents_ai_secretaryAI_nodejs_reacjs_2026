@@ -1,13 +1,41 @@
 {
   "name": "secretary-ai",
   "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "type": "module",
+  "license": "AGPL-version-3.0",
+  "private": false,
+  "engines": {
+    "node": ">= 14.0.0",
+    "npm": ">= 6.0.0"
+  },
+  "homepage": "",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "bugs": "",
+  "keywords": [],
+  "author": {
+    "name": "Josuel A. Lopes",
+    "email": "",
+    "url": ""
+  },
+  "contributors": [],
   "scripts": {
-    "dev": "node  --env-file=.env.development src/secretary.js",
-    "dev:watch": "node  --env-file=.env.development --watch src/secretary.js"
+    "dev": "npx tsc && node  --env-file=.env.development src/secretary.js",
+    "dev:mcp": "npx tsc && node --watch index.js",
+    "dev:mcp:watch": "npx tsc && node --watch index.js"
   },
   "dependencies": {
-    "@google/genai": "^2.8.0",
-    "dotenv": "^17.4.2"
+    "@google/genai": "^1.29.0",
+    "@modelcontextprotocol/sdk": "1.21.1",
+    "dotenv": "^17.4.2",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.0",
+    "typescript": "5.9.3"
   }
 }
