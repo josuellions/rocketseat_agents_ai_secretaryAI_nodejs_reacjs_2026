@@ -25,7 +25,12 @@ const graph = new StateGraph(State)
   .compile();
 
 const result = await graph.invoke({
-  messages: [new HumanMessage("Quero pagar a minha conta de R$ 500,00")],
+  // messages: [new HumanMessage("Quero pagar a minha conta de R$ 500,00")],
+  messages: [
+    new HumanMessage(
+      "Agende uma reunião com cliente e envie um email notificando.",
+    ),
+  ],
 });
 
 console.log(result);
