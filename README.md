@@ -1,10 +1,8 @@
 ### Project - secretary-ai- JS
 
-- [Link application web](#)
-
 ---
 
-##### Data: 03/06/2026
+##### Data: 03/06/2026 a 12/06/2026
 
 ##### Developer: Josuel A. Lopes
 
@@ -14,7 +12,7 @@
 
 ---
 
-Desenvolvimento acadêmico aplicando arquitetura de softwares e testes em uma aplicação SecretarIA (secretaryAI) em NodeJS, NextJS e ReactJS , conceitos de integração com API REST integrados a Gemmini AI Google, uma aplicação web prática e intuitiva que permite organizar eventos e agendamentos por data, consultar calendario, agendamento de novos compromissos, consultar e-mails e disparar envios de e-mail tudo atraves do seu proprio agente de IA customizado.
+Desenvolvimento acadêmico aplicando arquitetura de softwares e testes em uma aplicação SecretarIA (secretaryAI) em NodeJS, conceitos de integração com a Gemmini AI Google, uma aplicação web prática e intuitiva que permite organizar eventos e agendamentos por data, consultar calendario, agendamento de novos compromissos, consultar e-mails e disparar envios de e-mail tudo atraves do seu proprio agente de IA customizado.
 
 Aplicado na pratica conceitos de criação de agentes de AI, customizados e performatico para automatização de eventos e agendamentos.
 
@@ -24,15 +22,9 @@ Aplicado na pratica conceitos de criação de agentes de AI, customizados e perf
 
 ---
 
-- ReactJS,
-- NextJS,
 - NodeJS,
-- Playwright,
-- Prettier,
-- ESLint,
-- Docker,
-- CI/CD,
-- Jest
+- Langchain,
+- Google Genai
 
 <br/>
 
@@ -69,13 +61,12 @@ Aplicado na pratica conceitos de criação de agentes de AI, customizados e perf
 
 ```txt
   📦 src
-  ┣ 📂 app
-  ┃ ┗ 📜 page.tsx
-  ┣ 📂 core
-  ┃ ┗ 📜 use-case.ts
-  ┣ 📂 infra
-  ┃ ┣ 📜 doker-compose.yml
-  ┃ ┗ 📂 repository
+  ┣ 📂 agents
+  ┃ ┗ 📜 index.tsx
+  ┣ 📂 libs
+  ┃ ┗ 📜 index.ts
+  ┣ 📂 tools
+  ┃ ┣ 📜 index.ts
   ┗  📂 tests
 
 ```
@@ -89,53 +80,29 @@ Aplicado na pratica conceitos de criação de agentes de AI, customizados e perf
 
 - Padronização do código
   - Configurações
-    - `.github/workflows/dependabot.yml`
-    - `.github/workflows/ci.yml`
-    - `infra/docker-compose.yml`
-    - `playwright.config.ts`
-    - `prisma.config.ts`
     - `.prettierignore`
     - `.eslintrc.json`
-    - `jest.config.js`
-    - `jest.config.ts`
-    - `jest.setup.ts`
-    - `.editorconfig`
-    - `lefthook.yml`
-    - `jsconfig.js`
+    - `tsconfig.js`
     - `.gitignore`
 
 - [npm](https://docs.npmjs.com/cli/v10/commands/npm): v10.8.2 - npm is the package manager for the Node JavaScript platform. It puts modules in place so that node can find them, and manages dependency conflicts intelligently.
 
-- [pnpm](https://www.npmjs.com/package/pnpm?activeTab=readme): v8.15.5 - Microsoft uses pnpm in Rush repos with hundreds of projects and hundreds of PRs per day, and we’ve found it to be very fast and reliable..
+- [npm](https://www.npmjs.com/package/npm?activeTab=readme): v8.15.5 - Microsoft uses npm in Rush repos with hundreds of projects and hundreds of PRs per day, and we’ve found it to be very fast and reliable..
 
 - [Node.js](https://nodejs.org/en): v18.20.4 - Node.js® is a free, open-source, cross-platform JavaScript runtime environment that lets developers create servers, web apps, command line tools and scripts.
-
-- [Next.js](https://nextjs.org/) - Used by some of the world's largest companies, Next.js enables you to create high-quality web applications with the power of React components.
-
-- [React](https://react.dev/) - The library for web and native user interfaces
 
 - [ESLint](https://eslint.org/) - Static code analysis to help find problems within a codebase
 
 - [Prettier](https://prettier.io/) - An opinionated code formatter
-
-- [Lefthook](https://lefthook.dev/) - A Git hooks manager for Node.js, Ruby, Python and many other types of projects.
-
-- [Docker](https://hub.docker.com/_/postgres) - Docker Hub is the world's easiest way to create, manage, and deliver your team's container applications.
-
-- [Playwright](https://github.com/commitizen/cz-cli#readme) - One API to drive Chromium, Firefox, and WebKit — in your tests, your scripts, and your agent workflows. Available for TypeScript, Python, .NET, and Java.
-
-- [Jest](https://jestjs.io/) - Jest is a delightful JavaScript Testing Framework with a focus on simplicity.
-
-- [CI/CD](https://github.com/features/actions) - GitHub Actions makes it easy to automate all your software workflows, now with world-class CI/CD. Build, test, and deploy your code right from GitHub. Make code reviews, branch management, and issue triaging work the way you want.
 
 <br/>
 
 - Atualização de pacotes
 
 ```bash
-pnpm audit
-pnpm outdated
-npx pnpm-check-updates -i
+npm audit
+npm outdated
+npx npm-check-updates -i
 ```
 
 <br/>
@@ -144,45 +111,7 @@ npx pnpm-check-updates -i
 
 ---
 
-- Docker
-  - Docker Compose
-    - Criar e inicializar
-
-```bash
-docker compose --file infra/docker-compose.yml -d up
-docker ps
-```
-
-ou
-
-```bash
-pnpm run services:up
-```
-
-- Para ou excluir
-
-```bash
-docker compose --file infra/docker-compose.yml down
-docker ps -a
-```
-
-ou
-
-```bash
-pnpm run services:down
-```
-
-- Banco Dados
-  - Postgres (DBMS - Banco Dados relacional)
-    - node-pg-migrate (Migrations)
-
-    - pg (Query/Consultas)
-
-```bash
-pnpm services:prisma:create
-pnpm services:prisma:migrate
-pnpm services:prisma:seed
-```
+- Google GenAI
 
 <br/>
 
@@ -204,13 +133,13 @@ pnpm services:prisma:seed
   - Instalar ou atualizar os pacotes e dependências
 
 ```bash
-pnpm install
+npm install
 ```
 
 - Para executar o projeto em modo de desenvolvimento.
 
 ```bash
-pnpm run dev
+npm run dev
 ```
 
 <br/>
@@ -220,28 +149,28 @@ pnpm run dev
 ---
 
 - Estilização do código com `Prettier`
-  - Analisar e verificar
+  - Em desenvolvimento
 
 ```bash
-pnpm run lint:prettier:check
+
 ```
 
 - Corrigir e ajustar
 
 ```bash
-pnpm run lint:prettier:fix
+
 ```
 
 - Qualidade do código `ESLint`
 
 ```bash
-pnpm run lint:eslint:check
+
 ```
 
 - Qualidade do commit
 
 ```bash
-pnpm lint:type:check
+
 ```
 
 <br/>
@@ -254,21 +183,16 @@ pnpm lint:type:check
   - TDD (Test Driven Development)
     - Teste Runner (Jest)
 
-  - Para executar o projeto em modo de test.
+  - Em desenvolvimento.
 
 ```bash
-pnpm run test
+
 ```
 
 ou
 
 ```bash
-pnpm test
-pnpm test:check
-pnpm test:watch
-pnpm test:coverage
-pnpm test:e2e
-pnpm test:e2e:ui
+
 ```
 
 <br/>
@@ -304,7 +228,7 @@ pnpm test:e2e:ui
 Para gerar o build do projeto deve-se abrir no `Visual Code` gerando os arquivos e build da aplicação
 
 ```bash
-pnpm build
+npm build
 ```
 
 <br/>

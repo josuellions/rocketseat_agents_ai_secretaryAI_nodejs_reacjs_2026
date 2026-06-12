@@ -25,8 +25,7 @@
   "contributors": [],
   "scripts": {
     "build": "npx tsc",
-    "dev": "npx tsc && node  --env-file=.env.development src/secretary.js",
-    "dev:build": "npm run build && node dist/index.js"
+    "dev": "npm run build && node dist/index.js"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
