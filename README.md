@@ -1,3 +1,6 @@
+<img width="753" height="249" alt="1781289097416-ghaph" src="https://github.com/user-attachments/assets/769894e1-ab21-4a24-a1ca-171a41b3e25e" />
+
+
 ### Project - secretary-ai- JS
 
 ---
