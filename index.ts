@@ -1,29 +1,48 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { allDefinitions as calendarDefinitions } from "./src/tools/calendar.js";
-import { allDefinitions as emailDefinitions } from "./src/tools/email.js";
+import { HumanMessage } from "@langchain/core/messages";
+import { StateGraph, START, END } from "@langchain/langgraph";
+import fs from "fs";
 
-const allDefinitions = calendarDefinitions.concat(emailDefinitions);
+import { State } from "./src/states.js";
+import { agents } from "./src/agents/index.js";
+import { supervisorAction } from "./src/supervisor.js";
+import { financialSpecialist } from "./src/agents/financial_specialist.js";
+import { schedulingSpecialist } from "./src/agents/scheduling_specialist.js";
+import { commsSpecialist } from "./src/agents/comms_specialist.js";
 
-const server = new McpServer({
-  name: "secretary-ai",
-  version: "1.0.0",
-  capabilities: {
-    tools: {},
-  },
+const graph = new StateGraph(State)
+  .addNode(agents.supervisor, supervisorAction)
+  .addNode(agents.financial_specialist, financialSpecialist)
+  .addNode(agents.scheduling_specialist, schedulingSpecialist)
+  .addNode(agents.comms_specialist, commsSpecialist)
+  .addEdge(START, agents.supervisor)
+  .addConditionalEdges(agents.supervisor, (state: typeof State.State) => {
+    return state.nextNode;
+  })
+  .addEdge(agents.financial_specialist, agents.supervisor)
+  .addEdge(agents.scheduling_specialist, agents.supervisor)
+  .addEdge(agents.comms_specialist, agents.supervisor)
+  .addEdge(agents.supervisor, END)
+  .compile();
+
+const result = await graph.invoke({
+  // messages: [new HumanMessage("Quero pagar a minha conta de R$ 500,00")],
+  messages: [
+    new HumanMessage(
+      "Agende uma reunião com cliente e envie um email notificando.",
+    ),
+  ],
 });
 
-for (let definition of allDefinitions) {
-  server.tool(
-    definition.declaration.name,
-    definition.declaration.description,
-    definition.declaration.parameters ?? {},
-    definition.function,
-  );
-}
+console.log(result);
 
-const transport = new StdioServerTransport();
+const drawableGraph = await graph.getGraphAsync();
+const graphImage = await drawableGraph.drawMermaidPng();
+const graphArrayBuffer = await graphImage.arrayBuffer();
 
-await server.connect(transport);
+fs.writeFileSync(
+  `./img/${Date.now()}-ghaph.png`,
+  new Uint8Array(graphArrayBuffer),
+);
 
-console.error("MCP Server running...");
+// console.log(drawableGraph);
+console.log(graphImage);
